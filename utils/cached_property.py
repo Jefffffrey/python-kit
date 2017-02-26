@@ -39,7 +39,7 @@ class cached_property(object):
         self.__doc__ = doc or func.__doc__
         self.func = func
 
-    def __get__(self, obj):
+    def __get__(self, obj, type_=None):
         if obj is None:
             return self
 
