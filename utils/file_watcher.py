@@ -1,7 +1,8 @@
 import builtins
 
-_opened_files = set()
+__all__ = ['watch', 'get_not_closed_files', 'close_all']
 
+_opened_files = set()
 _old_open = builtins.open
 
 

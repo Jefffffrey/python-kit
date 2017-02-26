@@ -1,3 +1,6 @@
+__all__ = ['ClassPropertyMetaClass', 'classproperty']
+
+
 class ClassPropertyMetaClass(type):
     """修改默认的setattr方法调用
 

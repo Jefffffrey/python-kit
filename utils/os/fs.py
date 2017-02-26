@@ -4,6 +4,11 @@ import platform
 
 import shutil
 
+__all__ = [
+    'create_shortcut', 'hidden_dir', 'make_dir_of_file', 'clean_dir',
+    'exist_in_dir', 'exist_in_or_above', 'walk', 'virtual_workspace'
+]
+
 
 def create_shortcut(src_path, dest_dir):
     """在windows平台下创建指定路径的快捷方式,快捷方式的名字和前者一样

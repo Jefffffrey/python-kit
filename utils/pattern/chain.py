@@ -1,6 +1,7 @@
 """
 https://github.com/faif/python-patterns/blob/master/behavioral/chain.py
 """
+__all__ = ['Handler', 'coroutine']
 
 
 class Handler:

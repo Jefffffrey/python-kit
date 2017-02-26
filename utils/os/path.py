@@ -2,6 +2,8 @@
 import os
 import shutil
 
+__all__ = ['is_ignore', 'abspath']
+
 
 def is_ignore(path, *patterns):
     """判断path是否被忽略
