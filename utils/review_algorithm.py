@@ -59,6 +59,8 @@ class ReviewAlgorithm:
         fd, ef, lt, nt = (
             review_info.fd, review_info.ef, review_info.lt, review_info.nt)
 
+        assert fd != 0
+
         today = date.today()
         actual_interval = (today - lt).days
         standard_interval = fd
@@ -69,7 +71,8 @@ class ReviewAlgorithm:
         elif self._belong_to_early_review(standard_interval, actual_interval):
             if grade == Grade.EASY:
                 fd = math.ceil(actual_interval * ef) + (fd - actual_interval)
-                fd = int(fd)
+                # fd的最小值为1
+                fd = int(fd) or 1
                 nt = date.add(lt, fd)
                 return ReviewInfo(fd, ef, lt, nt)
             elif grade == Grade.REMEMBERED or grade == Grade.FORGOTTEN:
@@ -80,7 +83,7 @@ class ReviewAlgorithm:
                 return self._common_handle(ef, actual_interval, grade)
             elif grade == Grade.FORGOTTEN:
                 fd = math.ceil(fd * fd / actual_interval)
-                fd = int(fd)
+                fd = int(fd) or 1
                 nt = date.add(lt, 1)
                 return ReviewInfo(fd, ef, lt, nt)
 
@@ -123,7 +126,7 @@ class ReviewAlgorithm:
         ef = self._normalize_ef(ef)
 
         fd = math.ceil(actual_interval * ef)
-        fd = int(fd)
+        fd = int(fd) or 1
 
         lt = date.today()
         nt = date.add(lt, 1)
@@ -135,7 +138,7 @@ class ReviewAlgorithm:
         ef = self._normalize_ef(ef)
 
         fd = math.ceil(actual_interval * ef)
-        fd = int(fd)
+        fd = int(fd) or 1
 
         lt = date.today()
         nt = date.add(date.today(), fd)
