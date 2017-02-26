@@ -3,8 +3,10 @@ import unittest
 from utils.class_property import ClassPropertyMetaClass, classproperty
 
 
+# noinspection PyPropertyAccess
 class TestClassproperty(unittest.TestCase):
     def test(self):
+        # noinspection PyMethodParameters,PyPropertyDefinition
         class A(metaclass=ClassPropertyMetaClass):
             _a = 0
 

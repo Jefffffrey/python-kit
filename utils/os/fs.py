@@ -7,6 +7,7 @@ import shutil
 
 def create_shortcut(src_path, dest_dir):
     """在windows平台下创建指定路径的快捷方式,快捷方式的名字和前者一样
+
     eg:
         create_shortcut_2('C:/hello/world/python.exe','D:/programs')
         将在D:/programs 目录下创建python.lnk快捷方式
@@ -53,8 +54,10 @@ def hidden_dir(dirpath):
 
 def make_dir_of_file(filepath):
     """创建path路径的目录
+
     例如:
         E:\A\b.py 创建A目录
+
     Args:
         filepath: 文件路径
     """
@@ -68,6 +71,8 @@ def make_dir_of_file(filepath):
 
 def clean_dir(dir_path):
     """清空目录里面的所有文件和子目录
+
+    和Python内置删除目录的区别如下:
         os.rmdir只能删除空目录
         shutil.rmtree删除非空目录,但是会连跟目录一并删除
     """
@@ -160,7 +165,8 @@ def walk(dirpath, ignore_patterns: tuple = (), ignore_patterns_filepath=''):
             lines = filter(lambda line: line != '', lines)
             ignore_patterns += tuple(lines)
 
-    ignore_dirnames, ignore_extnames, ignore_filenames = _parser(ignore_patterns)
+    ignore_dirnames, ignore_extnames, ignore_filenames = _parser(
+        ignore_patterns)
 
     for dirpath, dirnames, filenames in os.walk(dirpath):
         for dirname in set(dirnames) & set(ignore_dirnames):
@@ -181,8 +187,7 @@ def walk(dirpath, ignore_patterns: tuple = (), ignore_patterns_filepath=''):
 
 
 def _parser(ignore_patterns):
-    """返回忽略模式列表中的目录名,后缀名,全名
-    """
+    """拿到忽略模式列表中的目录名,后缀名,全名"""
     dirnames = []
     filenames = []
     extnames = []

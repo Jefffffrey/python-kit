@@ -1,4 +1,5 @@
-"""这个包是我在使用python的过程中积累下来的一些可以复用的代码
+"""
+这个包是我在使用python的过程中积累下来的一些可以复用的代码
 当前使用的python版本为python3.5,没有考虑对其他python版本的兼容性
 """
 import operator
@@ -26,6 +27,7 @@ class Base:
             两个对象都是普通对象，且类型相同
             两个对象都是有slot的对象，类型相同
             两个对象都有slot和__dict__,类型相同
+
         对于slot的比较，之比较self本身的__slot__中存在的属性，不比较继承的部分
             参考:http://stackoverflow.com/questions/472000/usage-of-slots
         """

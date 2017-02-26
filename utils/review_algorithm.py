@@ -54,7 +54,8 @@ class ReviewAlgorithm:
 
     def review(self, review_info: ReviewInfo, grade: Grade):
         """处理复习了的item的复习信息"""
-        fd, ef, lt, nt = review_info.fd, review_info.ef, review_info.lt, review_info.nt
+        fd, ef, lt, nt = (
+            review_info.fd, review_info.ef, review_info.lt, review_info.nt)
 
         today = date.today()
         actual_interval = (today - lt).days
@@ -81,15 +82,19 @@ class ReviewAlgorithm:
                 nt = date.add(lt, 1)
                 return ReviewInfo(fd, ef, lt, nt)
 
-    def _belong_to_promptly_review(self, standard_interval, actual_interval: int):
+    def _belong_to_promptly_review(self, standard_interval,
+                                   actual_interval: int):
         return (standard_interval * (1 - self.algorithm_config.EXPAND_FACTOR) <=
-                actual_interval <= standard_interval * (1 + self.algorithm_config.EXPAND_FACTOR))
+                actual_interval <=
+                standard_interval * (1 + self.algorithm_config.EXPAND_FACTOR))
 
     def _belong_to_early_review(self, standard_interval, actual_interval):
-        return actual_interval < standard_interval * (1 - self.algorithm_config.EXPAND_FACTOR)
+        return (actual_interval <
+                standard_interval * (1 - self.algorithm_config.EXPAND_FACTOR))
 
     def _belong_to_late_review(self, standard_interval, actual_interval):
-        return actual_interval > standard_interval * (1 + self.algorithm_config.EXPAND_FACTOR)
+        return (actual_interval >
+                standard_interval * (1 + self.algorithm_config.EXPAND_FACTOR))
 
     def _calc_new_ef(self, fd, actual_interval, ef):
         last_fd = self._calc_last_fd(fd, ef)
@@ -111,7 +116,8 @@ class ReviewAlgorithm:
             raise ValueError('invalid grade:{}'.format(grade))
 
     def _handle_forgotten_item(self, ef, actual_interval):
-        ef += (self.algorithm_config.GRADE_EF_MAP[Grade.FORGOTTEN] - self.algorithm_config.GRADE_EF_MAP[Grade.EASY])
+        ef += (self.algorithm_config.GRADE_EF_MAP[Grade.FORGOTTEN] -
+               self.algorithm_config.GRADE_EF_MAP[Grade.EASY])
         ef = self._normalize_ef(ef)
 
         fd = math.ceil(actual_interval * ef)

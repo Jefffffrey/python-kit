@@ -25,10 +25,14 @@ class TestPath(unittest.TestCase):
 
     @staticmethod
     def test_abspath():
-        assert abspath('..\hello', r'E:\MyComputer\Workspace\项目', ) == r'E:\MyComputer\Workspace\hello'
-        assert abspath('.\hello', r'E:\MyComputer\Workspace\项目') == r"E:\MyComputer\Workspace\项目\hello"
-        assert abspath('hello', r'E:\MyComputer\Workspace\项目') == r"E:\MyComputer\Workspace\项目\hello"
-        assert abspath('.', r'E:\MyComputer\Workspace\项目') == r"E:\MyComputer\Workspace\项目"
+        assert abspath('..\hello', r'E:\MyComputer\Workspace\项目', ) == \
+            r'E:\MyComputer\Workspace\hello'
+        assert abspath('.\hello', r'E:\MyComputer\Workspace\项目') == \
+            r"E:\MyComputer\Workspace\项目\hello"
+        assert abspath('hello', r'E:\MyComputer\Workspace\项目') == \
+            r"E:\MyComputer\Workspace\项目\hello"
+        assert abspath('.', r'E:\MyComputer\Workspace\项目') == \
+            r"E:\MyComputer\Workspace\项目"
 
 
 if __name__ == '__main__':

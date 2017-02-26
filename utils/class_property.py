@@ -1,6 +1,8 @@
 class ClassPropertyMetaClass(type):
     """修改默认的setattr方法调用
-    来源于:http://stackoverflow.com/questions/5189699/how-can-i-make-a-class-property-in-python
+
+    参考:
+        http://stackoverflow.com/questions/5189699/how-can-i-make-a-class-property-in-python
     """
 
     def __setattr__(self, key, value):

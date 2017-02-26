@@ -2,8 +2,9 @@ _missing = object()
 
 
 class cached_property(object):
-    """A decorator that converts a function into a lazy property.  The
-    function wrapped is called the first time to retrieve the result
+    """A decorator that converts a function into a lazy property.
+
+    The function wrapped is called the first time to retrieve the result
     and then that calculated result is used the next time you access
     the value::
 
@@ -17,8 +18,9 @@ class cached_property(object):
     The class has to have a `__dict__` in order for this property to
     work.
 
-    http://stackoverflow.com/questions/17486104/python-lazy-loading-of-class-attributes
-    http://www.jianshu.com/p/250f0d305c35
+    参考:
+        http://stackoverflow.com/questions/17486104/python-lazy-loading-of-class-attributes
+        http://www.jianshu.com/p/250f0d305c35
     """
 
     # implementation detail: this property is implemented as non-data
@@ -35,7 +37,7 @@ class cached_property(object):
         self.__doc__ = doc or func.__doc__
         self.func = func
 
-    def __get__(self, obj, type=None):
+    def __get__(self, obj):
         if obj is None:
             return self
 
