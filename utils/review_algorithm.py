@@ -1,3 +1,4 @@
+import datetime
 import math
 from enum import Enum
 
@@ -37,11 +38,15 @@ class ReviewInfo(Base):
         self.lt = lt
         self.nt = nt
 
+    def __iter__(self):
+        for item in (self.fd, self.ef, self.lt, self.nt):
+            yield item
+
 
 class ReviewAlgorithm:
     algorithm_config = AlgorithmConfig
 
-    def new(self, interval=None):
+    def new(self, interval=None, date_offset=None):
         """生成新加入学习计划的item的复习信息"""
         if interval is None:
             fd = self.algorithm_config.INTERVAL_OF_NEW_ITEM
@@ -49,12 +54,21 @@ class ReviewAlgorithm:
             fd = int(interval)
 
         ef = self.algorithm_config.INIT_EF
-        lt = date.today()
+        lt = self._calc_last_time(date_offset)
         nt = date.add(lt, fd)
 
         return ReviewInfo(fd, ef, lt, nt)
 
-    def review(self, review_info: ReviewInfo, grade: Grade):
+    @staticmethod
+    def _calc_last_time(time):
+        if time is None:
+            lt = date.today()
+        else:
+            assert isinstance(time, int)
+            lt = date.today() - datetime.timedelta(days=time)
+        return lt
+
+    def review(self, review_info: ReviewInfo, grade: Grade, date_offset=None):
         """处理复习了的item的复习信息"""
         fd, ef, lt, nt = (
             review_info.fd, review_info.ef, review_info.lt, review_info.nt)
@@ -64,13 +78,14 @@ class ReviewAlgorithm:
         today = date.today()
         actual_interval = (today - lt).days
         standard_interval = fd
-        lt = today
+        lt = self._calc_last_time(date_offset)
 
         if self._belong_to_promptly_review(standard_interval, actual_interval):
             return self._common_handle(ef, actual_interval, grade)
         elif self._belong_to_early_review(standard_interval, actual_interval):
             if grade == Grade.EASY:
                 fd = math.ceil(actual_interval * ef) + (fd - actual_interval)
+
                 # fd的最小值为1
                 fd = int(fd) or 1
                 nt = date.add(lt, fd)
