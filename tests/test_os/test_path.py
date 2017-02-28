@@ -1,6 +1,6 @@
 import unittest
 
-from utils.os.path import is_ignore, abspath
+from kit.os.path import is_ignore, abspath
 
 
 class TestPath(unittest.TestCase):

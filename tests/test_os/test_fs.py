@@ -1,7 +1,7 @@
 import unittest
 
 # noinspection PyProtectedMember
-from utils.os.fs import _parser
+from kit.os.fs import _parser
 
 
 class TestFS(unittest.TestCase):

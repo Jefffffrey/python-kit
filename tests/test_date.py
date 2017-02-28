@@ -2,7 +2,7 @@ import datetime
 import unittest
 from unittest.mock import patch
 
-from utils.date import *
+from kit.date import *
 
 
 class TestDate(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestDate(unittest.TestCase):
             res = sub(*arg)
             self.assertEqual(res, result)
 
-    @patch('utils.date.today', autospec=True)
+    @patch('kit.date.today', autospec=True)
     def test_days_ago(self, mock_today):
         values = {
             ('2016-06-26',): 2,
