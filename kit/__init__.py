@@ -11,6 +11,8 @@ from io import StringIO
 
 from . import date
 
+__version__ = '0.1.0'
+
 __all__ = ['Base', 'timeit', 'suppress_stdout', 'stdout_to_string_io']
 
 
