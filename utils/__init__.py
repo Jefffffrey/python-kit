@@ -2,8 +2,15 @@
 当前使用的python版本为python3.5,没有考虑对其他python版本的兼容性
 """
 import operator
+import os
+import sys
+import time
+from contextlib import contextmanager
+from io import StringIO
 
 from . import date
+
+__all__ = ['Base', 'timeit', 'suppress_stdout', 'stdout_to_string_io']
 
 
 class Base:
@@ -50,3 +57,35 @@ class Base:
             result.append(str(slots))
         result.append(str(self.__dict__))
         return '\n'.join(result)
+
+
+def timeit(func):
+    def count(*args, **kwargs):
+        start = time.time()
+        res = func(*args, **kwargs)
+        count._time = time.time() - start
+        return res
+
+    return count
+
+
+@contextmanager
+def suppress_stdout():
+    stdout = None
+    try:
+        stdout, sys.stdout = sys.stdout, open(os.devnull, 'w')
+        yield
+    finally:
+        sys.stdout = stdout
+
+
+@contextmanager
+def stdout_to_string_io():
+    stdout = None
+    string_io = StringIO()
+    try:
+        stdout, sys.stdout = sys.stdout, string_io
+        yield string_io
+    finally:
+        sys.stdout = stdout
+        string_io.close()
