@@ -2,7 +2,7 @@ import datetime
 import unittest
 from unittest.mock import patch
 
-from kit.date import *
+from utils.date import *
 
 
 class TestDate(unittest.TestCase):

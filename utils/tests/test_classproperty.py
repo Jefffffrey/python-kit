@@ -1,6 +1,6 @@
 import unittest
 
-from kit.class_property import ClassPropertyMetaClass, classproperty
+from utils.class_property import ClassPropertyMetaClass, classproperty
 
 
 # noinspection PyPropertyAccess

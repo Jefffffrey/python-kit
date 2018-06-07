@@ -3,8 +3,8 @@ import importlib
 import unittest
 from collections import deque
 
-import kit
-from kit.review_algorithm import Grade, ReviewAlgorithm, ReviewInfo
+import utils
+from utils.review_algorithm import Grade, ReviewAlgorithm, ReviewInfo
 
 
 class TestReviewAlgorithm(unittest.TestCase):
@@ -179,15 +179,15 @@ class TestReviewAlgorithm(unittest.TestCase):
             # days表示实际在几天之后来复习的
             fd, ef, days = review_info
             lt = datetime.date(2016, 2, 1)
-            nt = kit.date.add(lt, fd)
+            nt = utils.date.add(lt, fd)
             review_info = fd, ef, lt, nt
 
             # mock今天
-            kit.date.today = self.today(lt, days)
+            utils.date.today = self.today(lt, days)
 
             fd, ef, days = target
-            lt = kit.date.today()
-            nt = kit.date.add(lt, days)
+            lt = utils.date.today()
+            nt = utils.date.add(lt, days)
             target = fd, ef, lt, nt
 
             review_info = ReviewInfo(*review_info)
@@ -198,4 +198,4 @@ class TestReviewAlgorithm(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        importlib.reload(kit.date)
+        importlib.reload(utils.date)

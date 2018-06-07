@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
-import kit
+import utils
 
 setup(
     name='kit',
-    version=kit.__version__,
+    version=utils.__version__,
     packages=find_packages(exclude=('tests', 'tests*'))
 )

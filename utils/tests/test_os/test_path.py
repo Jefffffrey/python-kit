@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from kit.os.path import is_ignore, abspath
+from utils.os.path import is_ignore, abspath
 
 _is_windows = sys.platform in ('win32', 'cygwin')
 

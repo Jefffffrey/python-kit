@@ -1,7 +1,7 @@
 import unittest
 
-from kit import stdout_to_string_io
-from kit.pattern.chain import coroutine
+from utils import stdout_to_string_io
+from utils.pattern.chain import coroutine
 
 
 @coroutine
