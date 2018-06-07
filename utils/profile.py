@@ -66,7 +66,7 @@ else:
                     dirname = os.path.dirname(func_module_file)
                     module_name = os.path.basename(func_module_file).split('.')[
                         0]
-                    child.stdin.write("""
+                    statements = """
 import os
 os.chdir('{dirname}')
 import {module_name}
@@ -92,7 +92,8 @@ with timeit() as r:
     {module_name}.{func_name}{args}
 print(r.elapsed)
         """.format(dirname=dirname, module_name=module_name,
-                   func_name=func.__name__, args=args).encode())
+                   func_name=func.__name__, args=args).encode()
+                    child.stdin.write(statements)
                     child.stdin.close()
                     child.wait()
                     children.append(child)
