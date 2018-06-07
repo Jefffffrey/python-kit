@@ -102,7 +102,10 @@ print(r.elapsed)
                     cmd_out = child.stdout.read()
                     elapsed = cmd_out.decode().split('\n')[-2].strip()
                     child.stdout.close()
-                    report.append('{:.3f}'.format(float(elapsed)))
+                    try:
+                        report.append('{:.3f}'.format(float(elapsed)))
+                    except ValueError:
+                        print(child.stderr.read())
                     summary[i_child] += float(elapsed)
                 else:
                     for j in range(1, len(report)):
