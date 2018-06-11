@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 import builtins
 
 __all__ = ['watch', 'get_not_closed_files', 'close_all']

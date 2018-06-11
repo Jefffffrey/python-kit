@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 """
 https://github.com/faif/python-patterns/blob/master/behavioral/chain.py
 """

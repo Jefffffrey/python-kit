@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 """本模块提供一些关于文件系统路径处理的帮助函数"""
 import os
 import shutil

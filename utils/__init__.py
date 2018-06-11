@@ -1,7 +1,10 @@
+# -*- coding:utf-8 -*-
+
 """
 这个包是我在使用python的过程中积累下来的一些可以复用的代码
 当前使用的python版本为python3.5,没有考虑对其他python版本的兼容性
 """
+import contextlib
 import operator
 import os
 import sys
@@ -68,9 +71,34 @@ def timeit(func):
         start = time.time()
         res = func(*args, **kwargs)
         count._time = time.time() - start
+        print()
         return res
 
     return count
+
+
+class Object: pass
+
+
+@contextlib.contextmanager
+def timeit_cm(desc='', auto_print=True):
+    """    
+    Args:
+        desc: 打印的文字描述
+        auto_print: 是否打印文字描述以及时间
+    """
+    start = time.time()
+    result = Object()
+    try:
+        yield result
+    except:
+        raise
+    else:
+        end = time.time()
+        result.elapsed = end - start
+        if auto_print:
+            print(desc + ': {}'.format(result.elapsed))
+            sys.stdout.flush()
 
 
 @contextmanager

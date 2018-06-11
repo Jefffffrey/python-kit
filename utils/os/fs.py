@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 """该模块主要提供一些关于文件系统(filesystem)的API"""
 import os
 import platform

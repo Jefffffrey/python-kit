@@ -1,7 +1,9 @@
-import contextlib
+# -*- coding:utf-8 -*-
+
 import os
 import subprocess
-import time
+
+import prettytable
 
 ppid = os.getppid()
 cmd = os.readlink('/proc/{}/exe'.format(ppid))
@@ -9,23 +11,6 @@ if cmd.find('python') != -1:
     CHILD = True
 else:
     CHILD = False
-
-
-class Object: pass
-
-
-@contextlib.contextmanager
-def timeit():
-    start = time.time()
-    result = Object()
-    try:
-        yield result
-    except:
-        print('error')
-    finally:
-        end = time.time()
-        result.elapsed = end - start
-
 
 if CHILD:
     class TimeComparator:
@@ -51,8 +36,14 @@ else:
                 summary:
                 (平均值，平均值，平均值，平均值)
             """
-            print('PPID: {}'.format(os.getpid()))
-            print('Begin:')
+            tb = prettytable.PrettyTable()
+            field_names = ['']
+            for func in funcs:
+                field_names.append(func.__name__)
+            field_names.extend(map(lambda x: '{}:1'.format(x + 1),
+                                   range(1, len(funcs))))
+            tb.field_names = field_names
+
             summary = [0] * (2 * len(funcs) - 1)
             for i in range(numbers):
                 children = []
@@ -61,11 +52,10 @@ else:
                                              stdin=subprocess.PIPE,
                                              stdout=subprocess.PIPE,
                                              stderr=subprocess.PIPE)
-                    print('PID: {}'.format(child.pid))
                     func_module_file = __import__(func.__module__).__file__
                     dirname = os.path.dirname(func_module_file)
-                    module_name = os.path.basename(func_module_file).split('.')[
-                        0]
+                    module_name = os.path.basename(func_module_file) \
+                        .split('.')[0]
                     statements = """
 import os
 os.chdir('{dirname}')
@@ -81,8 +71,8 @@ def timeit():
     result = Object()
     try:
         yield result
-    except:
-        print('error')
+    except Exception as e:
+        print(e)
         raise
     finally:
         end = time.time()
@@ -98,7 +88,7 @@ print(r.elapsed)
                     child.wait()
                     children.append(child)
 
-                report = []
+                report = [i]
                 for i_child, child in enumerate(children):
                     cmd_out = child.stdout.read()
                     elapsed = cmd_out.decode().split('\n')[-2].strip()
@@ -109,15 +99,16 @@ print(r.elapsed)
                         print(child.stderr.read())
                     summary[i_child] += float(elapsed)
                 else:
-                    for j in range(1, len(report)):
-                        time1 = float(report[0])
+                    for j in range(2, len(report)):
+                        time1 = float(report[1])
                         time2 = float(report[j])
                         rate = (time2 - time1) / time1 * 100
                         report.append('{:.3f}'.format(rate))
-                        summary[len(report) - 1] += float(rate)
+                        summary[len(children) + j - 2] += float(rate)
+                    tb.add_row(report)
 
                 print(report)
-            summary = map(lambda x: '{:.3f}'.format(x / numbers), summary)
-            print('Summary:')
-            print(list(summary))
-            print()
+            summary = list(map(lambda x: '{:.3f}'.format(x / numbers), summary))
+            summary.insert(0, 'Summary')
+            tb.add_row(summary)
+            print(tb)
