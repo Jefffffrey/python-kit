@@ -52,9 +52,45 @@ print_size_of(('abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz',
                'abcdefghijklmnopqrstuvwxyz'))  # 72
 
 ##
+# 字典,对空间进行了预分配
+##
+print_size_of({})  # 288
+print_size_of({1: 2})  # 288
+print_size_of({1: 2, 2: 3})  # 288
+
+##
 # 集合,对空间进行了预分配
 ##
 print_size_of(set())  # 224
 print_size_of({1})  # 224
 print_size_of({1, 2, 3})  # 224
 print_size_of(set(range(6)))  # 736
+
+
+##
+# 函数参数
+##
+def foo(a):
+    # list会变大，其他不会
+    print_size_of(a)
+
+
+def bar(a):
+    a = a[:]
+    print_size_of(a)
+
+
+foo([])
+foo(1)
+foo(())
+foo(None)
+foo(set())
+foo({})
+
+##
+# 其他
+##
+import faker
+
+fake = faker.Faker()
+print_size_of(fake.md5())  # length: 32, size: 81

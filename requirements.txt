@@ -1,3 +1,4 @@
+faker
 prettytable
 sqlalchemy
 pandas

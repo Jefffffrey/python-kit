@@ -66,15 +66,17 @@ class Base:
         return '\n'.join(result)
 
 
-def timeit(func):
-    def count(*args, **kwargs):
-        start = time.time()
+# 直接使用
+def timeit(func, args=(), kwargs: dict = None, *, number=1):
+    if kwargs is None:
+        kwargs = {}
+    assert isinstance(kwargs, dict)
+    start = time.time()
+    while number:
         res = func(*args, **kwargs)
-        count._time = time.time() - start
-        print()
-        return res
-
-    return count
+        number -= 1
+    print(time.time() - start)
+    return res
 
 
 class Object: pass
