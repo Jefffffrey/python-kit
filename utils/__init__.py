@@ -1,9 +1,7 @@
 # -*- coding:utf-8 -*-
 
-"""
-这个包是我在使用python的过程中积累下来的一些可以复用的代码
-当前使用的python版本为python3.5,没有考虑对其他python版本的兼容性
-"""
+from __future__ import absolute_import
+
 import contextlib
 import operator
 import os
@@ -12,6 +10,7 @@ import time
 from contextlib import contextmanager
 from io import StringIO
 
+from utils.compat import PY3
 from . import date
 
 __version__ = '0.1.0'
@@ -66,16 +65,17 @@ class Base:
         return '\n'.join(result)
 
 
-# 直接使用
-def timeit(func, args=(), kwargs: dict = None, *, number=1):
+def timeit(func, args=(), kwargs=None, number=1):
     if kwargs is None:
         kwargs = {}
     assert isinstance(kwargs, dict)
+    print('{} args:{}, kwargs:{}, number:{}'.format(
+        func.__name__, args, kwargs, number))
     start = time.time()
     while number:
         res = func(*args, **kwargs)
         number -= 1
-    print(time.time() - start)
+    print('total time:{}'.format(time.time() - start))
     return res
 
 
@@ -123,3 +123,27 @@ def stdout_to_string_io():
     finally:
         sys.stdout = stdout
         string_io.close()
+
+
+def pause():
+    print('Pause progress {},press any key to continue'.format(os.getpid()))
+    if compat.PY3:
+        input()
+    elif compat.PY2:
+        raw_input()
+
+
+class AutoCounter:
+    """
+    创建该对象后，每次调用+1，退出时显示结果
+    """
+
+    def __init__(self, desc=''):
+        self.desc = desc
+        self.count = 0
+
+    def __call__(self, *args, **kwargs):
+        self.count += 1
+
+    def __del__(self):
+        print('autocounter: {}-{}'.format(self.desc, self.count))
