@@ -1,0 +1,178 @@
+<meta charset="UTF-8">
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+
+<div id="container"></div>
+
+<style>
+    .chart {
+        min-width: 320px;
+        max-width: 800px;
+        height: 220px;
+        margin: 0 auto;
+    }
+</style>
+<!-- http://doc.jsfiddle.net/use/hacks.html#css-panel-hack -->
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<style>
+</style>
+
+<script>
+    ['mousemove', 'touchmove', 'touchstart'].forEach(function (eventType) {
+        document.getElementById('container').addEventListener(
+            eventType,
+            function (e) {
+                var chart,
+                    point,
+                    i,
+                    event;
+                for (i = 0; i < Highcharts.charts.length; i = i + 1) {
+                    chart = Highcharts.charts[i];
+                    event = chart.pointer.normalize(e);
+                    point = chart.series[0].searchPoint(event, true);
+                    if (point) {
+                        point.highlight(e);
+                    }
+                }
+            }
+        );
+    });
+    Highcharts.Pointer.prototype.reset = function () {
+        return undefined;
+    };
+    Highcharts.Point.prototype.highlight = function (event) {
+        event = this.series.chart.pointer.normalize(event);
+        this.onMouseOver(); // Show the hover marker
+        this.series.chart.tooltip.refresh(this); // Show the tooltip
+        this.series.chart.xAxis[0].drawCrosshair(event, this); // Show the crosshair
+    };
+
+    function syncExtremes(e) {
+        var thisChart = this.chart;
+
+        if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
+            Highcharts.each(Highcharts.charts, function (chart) {
+                if (chart !== thisChart) {
+                    if (chart.xAxis[0].setExtremes) { // It is null while updating
+                        chart.xAxis[0].setExtremes(
+                            e.min,
+                            e.max,
+                            undefined,
+                            false,
+                            {trigger: 'syncExtremes'}
+                        );
+                    }
+                }
+            });
+        }
+    }
+
+
+    xData = [1, 2, 4, 8, 16, 32, 64, 128, 256, 300];
+    datasets = [
+            {
+            data: [3000.0, 6000.0, 12000.0, 24000.0, 48000.0, 96000.0, 192000.0, 384000.0, 768000.0, 900000.0],
+            name: "Query",
+            type: "line",
+            unit: "",
+            valueDecimals: 0,
+        },
+                {
+            data: [0.35315680503845215, 0.3127310276031494, 0.4394388198852539, 0.7309198379516602, 1.3691270351409912, 2.668750762939453, 6.9188079833984375, 13.849781036376953, 36.76802182197571, 65.00829577445984],
+            name: "S",
+            type: "line",
+            unit: "",
+            valueDecimals: 0,
+        },
+        {
+            data: [8494.810116071121, 19185.81615001727, 27307.55558449168, 32835.33809570408, 35058.83586255895, 35971.88667189825, 27750.444940906113, 27726.070108358395, 20887.71606257527, 13844.386924439079],
+            name: "QPS",
+            type: "line",
+            unit: "",
+            valueDecimals: 0,
+        },
+        {
+            data: [0.11771893501281738, 0.05212183793385824, 0.03661990165710449, 0.03045499324798584, 0.02852347989877065, 0.027799487113952637, 0.03603545824686686, 0.03606713811556498, 0.04787502841403087, 0.07223143974939981],
+            name: "平均响应时间",
+            type: "line",
+            unit: "ms",
+            valueDecimals: 1,
+        },
+    ]
+
+    datasets.forEach(function (dataset, i) {
+
+        // Add X values
+        dataset.data = Highcharts.map(dataset.data, function (val, j) {
+            return [xData[j], val];
+        });
+
+        var chartDiv = document.createElement('div');
+        chartDiv.className = 'chart';
+        document.getElementById('container').appendChild(chartDiv);
+
+        Highcharts.chart(chartDiv, {
+            chart: {
+                marginLeft: 40, // Keep all charts left aligned
+                spacingTop: 20,
+                spacingBottom: 20
+            },
+            title: {
+                text: dataset.name,
+                align: 'left',
+                margin: 0,
+                x: 30
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: {
+                crosshair: true,
+                events: {
+                    setExtremes: syncExtremes
+                },
+                labels: {
+                    format: '{value}'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                positioner: function () {
+                    return {
+                        // right aligned
+                        x: this.chart.chartWidth - this.label.width,
+                        y: 10 // align to title
+                    };
+                },
+                borderWidth: 0,
+                backgroundColor: 'none',
+                pointFormat: '{point.y}',
+                headerFormat: '',
+                shadow: false,
+                style: {
+                    fontSize: '18px'
+                },
+                valueDecimals: dataset.valueDecimals
+            },
+            series: [{
+                data: dataset.data,
+                name: dataset.name,
+                type: dataset.type,
+                color: Highcharts.getOptions().colors[i],
+                fillOpacity: 0.3,
+                tooltip: {
+                    valueSuffix: ' ' + dataset.unit
+                }
+            }]
+        });
+    })
+
+</script>
+    

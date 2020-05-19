@@ -1,0 +1,87 @@
+<meta charset="UTF-8">
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<div id="container"></div>
+
+<style>
+    #container {
+        min-width: 310px;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto
+    }
+</style>
+
+<script>
+    Highcharts.chart('container', {
+
+        title: {
+            text: 'MySQL 压力测试'
+        },
+
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+
+        series: [{
+            name: 'QPS',
+            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175],
+        }, {
+            name: 'Avg Response Time',
+            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 420434],
+            yAxis: 2,
+        }],
+
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+
+        yAxis: [{ // left y axis
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'left',
+                x: 3,
+                y: 16,
+                format: '{value:.,0f}'
+            },
+            showFirstLabel: false
+        }, { // right y axis
+            linkedTo: 0,
+            gridLineWidth: 0,
+            opposite: true,
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'right',
+                x: -3,
+                y: 16,
+                format: '{value:.,0f}'
+            },
+            showFirstLabel: false
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+
+    });
+</script>

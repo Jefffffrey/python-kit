@@ -79,6 +79,22 @@ def timeit(func, args=(), kwargs=None, number=1):
     return res
 
 
+def qps(func, args=(), kwargs=None, number=1):
+    if kwargs is None:
+        kwargs = {}
+    assert isinstance(kwargs, dict)
+    print('{} args:{}, kwargs:{}, number:{}'.format(
+        func.__name__, args, kwargs, number))
+    start = time.time()
+    res = func(*args, **kwargs)
+    total_time = time.time() - start
+    print({
+        "qps": number / total_time,
+        "total_time": total_time
+    })
+    return res
+
+
 class Object: pass
 
 
